@@ -9,8 +9,7 @@ namespace GymManagementDAL.Repositories.Interfaces
 {
     public interface IPlanRepository
     {
-        int Add (Plan plan);
-        int Delete (Plan plan);
+     
         int Update (Plan plan);
         Plan? GetById(int Id);
         IEnumerable<Plan> GetAll ();    

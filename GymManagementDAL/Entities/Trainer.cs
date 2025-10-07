@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    public class Trainer : GymUserv 
+    public class Trainer : BaseEntity 
     {
         // HireDate == CteatedAt => (inheritance) From BaseEntity
         public Specialties Specialties { get; set; }

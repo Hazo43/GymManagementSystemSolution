@@ -11,7 +11,7 @@ namespace GymManagementDAL.Data.Configrations
 {
 
     // GymUserBaseConfigrations   ممكن نسميها كدا بردو صح
-    internal class GymUserConfigrations<T> : IEntityTypeConfiguration<T> where T : GymUserv
+    public class GymUserConfigrations<T> : IEntityTypeConfiguration<T> where T : GymUserv
     {
         //  عندي اصلا  table عشان هو مش  GymUser هيه مش معموله لل
         // وارثين منها trainer و  member  عشان ال GymUser لل  Configrations احنا عملنا 
