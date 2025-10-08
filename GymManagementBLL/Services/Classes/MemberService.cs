@@ -17,18 +17,21 @@ namespace GymManagementBLL.Services.Classes
         private readonly IGenericRepository<MemberShip> membershipRepository;
         private readonly IPlanRepository planRepository;
         private readonly IGenericRepository<HealthRecord> healthRecordRepository;
+        private readonly IGenericRepository<MemberSession> memberSessionRepository;
 
         // Ask SLR For Creating Object From Services   => Services يعني لازم اروح البروجرم واعمل حجات في ال
         // CLR Will Inject Address of Object In Constractor 
         public MemberService( IGenericRepository<Member> _MemberRepository , 
                              IGenericRepository<MemberShip> _membershipRepository , 
                              IPlanRepository _planRepository , 
-                             IGenericRepository<HealthRecord> _healthRecordRepository)
+                             IGenericRepository<HealthRecord> _healthRecordRepository , 
+                             IGenericRepository<MemberSession> _memberSessionRepository)
         {
             MemberRepository = _MemberRepository;
             membershipRepository = _membershipRepository;
             planRepository = _planRepository;
             healthRecordRepository = _healthRecordRepository;
+            memberSessionRepository = _memberSessionRepository;
         }
 
         // Add - Create 
@@ -86,8 +89,10 @@ namespace GymManagementBLL.Services.Classes
         {
             var Member = MemberRepository.GetAll();   // => IGenericRepository<TEntity> 
            
-            if (Member is null || !Member.Any()) return [];
-            
+            if (Member is null || !Member.Any()) 
+                  return [];
+           
+
             var membersmodels = Member.Select(x => new MemberViewModel
             {
                 Id = x.Id,
@@ -104,6 +109,7 @@ namespace GymManagementBLL.Services.Classes
         public MemberViewModel? GetMemberDetails(int MemberId)
         {
             var member = MemberRepository.GetById(MemberId);
+
             if (member is null) return null;
 
             var viewModel = new MemberViewModel()
@@ -151,8 +157,83 @@ namespace GymManagementBLL.Services.Classes
             return viewModel;
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="MemberId"></param>
+        /// <returns></returns>
 
+        // Update 
+        public MemberToUpdateViewModel? GetMemberToUpdate(int MemberId)
+        {
+            var member = MemberRepository.GetById(MemberId);
+            if (member is null) return null;
 
+            return new MemberToUpdateViewModel()
+            {
+                Name = member.Name,
+                Email = member.Email,
+                Phone = member.Phone,
+                Photo = member.Photo,
+                BuildingNumber = member.Address.BuildingNumber,
+                Street = member.Address.Street,
+                City = member.Address.City,
+            };
+        }
+
+        public bool UpdateMember(int Id, MemberToUpdateViewModel UpdateMember)
+        {
+            var Email = MemberRepository.GetAll( x => x.Email == UpdateMember.Email ).Any();
+            var Phone = MemberRepository.GetAll( x => x.Phone == UpdateMember.Phone ).Any();
+            if (Email || Phone == true) return false;
+
+            var Member = MemberRepository.GetById( Id );
+            if (Member is null) return false;
+
+            Member.Email = UpdateMember.Email;
+            Member.Phone = UpdateMember.Phone;
+            Member.Address.BuildingNumber = UpdateMember.BuildingNumber;
+            Member.Address.City = UpdateMember.City;
+            Member.Address.Street = UpdateMember.Street;
+
+            ///// => false لو محدش عدل هيرجع true لو حد عدل هيرجع
+
+            return MemberRepository.Update( Member ) > 0;
+        }
+
+        // Remove 
+        public bool RemoveMember(int MemberId)
+        {
+           
+
+            var Member = MemberRepository.GetById(MemberId);
+            if (Member is null) return false;
+
+            var HasActiveMemberSession = memberSessionRepository 
+                    .GetAll( x => x.SessionId == MemberId && x.Session.StartDate > DateTime.Now ).Any();
+          
+            if (HasActiveMemberSession) return false;
+
+            var MemberShips = memberSessionRepository.GetAll(X => X.MemberId == MemberId);
+           
+            // Active هيمسح الاشخاص اللي هما مش
+            
+            try
+            {
+                if (MemberShips.Any())
+                {
+                    foreach (var membership in MemberShips)
+                    {
+                        memberSessionRepository.Delete( membership );
+                    }
+                }
+               return MemberRepository.Delete(Member) > 0;
+            }
+            catch 
+            {
+                return false;
+            }
+
+        }
     }
 }
