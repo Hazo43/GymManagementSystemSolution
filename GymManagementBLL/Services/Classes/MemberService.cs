@@ -189,9 +189,9 @@ namespace GymManagementBLL.Services.Classes
         public bool RemoveMember(int MemberId)
         {
            
-            var MemberRepo = unitOfWork.GetRepository<Member>();
+        //    var MemberRepo = unitOfWork.GetRepository<Member>();
 
-            var Member = MemberRepo.GetById(MemberId);
+            var Member = unitOfWork.GetRepository<Member>().GetById(MemberId);
             if (Member is null) return false;
 
             var HasActiveMemberSession = unitOfWork.GetRepository<MemberSession>()
