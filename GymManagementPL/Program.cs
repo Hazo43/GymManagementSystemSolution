@@ -17,8 +17,8 @@ namespace GymManagementPL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaulConnection"));
             });
 
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped(typeof(IPlanRepository), typeof(PlanRepository));
+            //builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //builder.Services.AddScoped(typeof(IPlanRepository), typeof(PlanRepository));
             
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             
