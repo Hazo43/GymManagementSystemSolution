@@ -19,6 +19,10 @@ namespace GymManagementPL
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped(typeof(IPlanRepository), typeof(PlanRepository));
+            
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

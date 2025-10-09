@@ -13,25 +13,14 @@ namespace GymManagementBLL.Services.Classes
 {
     public class MemberService : IMemberService
     {
-        private readonly IGenericRepository<Member> MemberRepository;
-        private readonly IGenericRepository<MemberShip> membershipRepository;
-        private readonly IPlanRepository planRepository;
-        private readonly IGenericRepository<HealthRecord> healthRecordRepository;
-        private readonly IGenericRepository<MemberSession> memberSessionRepository;
+        private readonly IUnitOfWork unitOfWork;
+
 
         // Ask SLR For Creating Object From Services   => Services يعني لازم اروح البروجرم واعمل حجات في ال
         // CLR Will Inject Address of Object In Constractor 
-        public MemberService( IGenericRepository<Member> _MemberRepository , 
-                             IGenericRepository<MemberShip> _membershipRepository , 
-                             IPlanRepository _planRepository , 
-                             IGenericRepository<HealthRecord> _healthRecordRepository , 
-                             IGenericRepository<MemberSession> _memberSessionRepository)
+        public MemberService( IUnitOfWork _unitOfWork )
         {
-            MemberRepository = _MemberRepository;
-            membershipRepository = _membershipRepository;
-            planRepository = _planRepository;
-            healthRecordRepository = _healthRecordRepository;
-            memberSessionRepository = _memberSessionRepository;
+           unitOfWork = _unitOfWork;
         }
 
         // Add - Create 
