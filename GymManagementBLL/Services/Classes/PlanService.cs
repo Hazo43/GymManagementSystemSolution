@@ -82,15 +82,21 @@ namespace GymManagementBLL.Services.Classes
         {
             var Plan = unitOfWork.GetRepository<Plan>().GetById(planId);
             if (Plan is null) return false;
-             
-            Plan.Description = updatedPlan.Description;
-            Plan.Price = updatedPlan.Price;
-            Plan.DurationDays = updatedPlan.DurationDays;
-           
 
-            unitOfWork.GetRepository<Plan>().Update(Plan);
-            return unitOfWork.Savechanges() > 0;
+            try
+            {
+                Plan.Description = updatedPlan.Description;
+                Plan.Price = updatedPlan.Price;
+                Plan.DurationDays = updatedPlan.DurationDays;
+                Plan.UpdatedAt = DateTime.Now;
 
+                unitOfWork.GetRepository<Plan>().Update(Plan);
+                return unitOfWork.Savechanges() > 0;
+            }
+            catch 
+            {
+                return false;
+            }
         }
 
         public bool ToggleStatus(int planId)
@@ -129,12 +135,12 @@ namespace GymManagementBLL.Services.Classes
         /// <returns></returns>
 
         private bool HasActiveMemberShip (int planId)
-         {
+        {
             var ActiveMemberShip = unitOfWork.GetRepository<MemberShip>()
                                   .GetAll(x => x.PlanId == planId
                                           && x.Status == "Active");
             return ActiveMemberShip.Any();
-         }
+        }
 
         #endregion
     }

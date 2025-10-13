@@ -30,7 +30,7 @@ namespace GymManagementBLL.ViewModels.MemberViewModels
         public string Phone { get; set; } = null!;
 
 
-        [Required(ErrorMessage = "Phone Is Required")]
+        [Required(ErrorMessage = "Data Of Birth Is Required")]
         [DataType(DataType.Date)]
         public DateOnly DataOfBirth { get; set; }
 
@@ -49,7 +49,7 @@ namespace GymManagementBLL.ViewModels.MemberViewModels
         public string Street { get; set; } = null!;
 
 
-        [Required(ErrorMessage = "Street Is Required")]
+        [Required(ErrorMessage = "City Is Required")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "City Must Be Between 2 And 30 Char")]
         [RegularExpression(@"^[a-zA-Z\s]+$" , ErrorMessage = "City Can Contain Only Letters And Spaces")]
         public string City { get; set; } = null!;

@@ -154,7 +154,7 @@ namespace GymManagementBLL.Services.Classes
             {
               var HasActiveSessions = unitOfWork.GetRepository<Session>()
              .GetAll(s => s.TrainerId == trainerid && s.StartDate > DateTime.Now).Any(); 
-            return HasActiveSessions;
+              return HasActiveSessions;
             }
            
 
