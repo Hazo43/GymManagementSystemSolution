@@ -98,6 +98,7 @@ namespace GymManagementBLL.Services.Classes
             var MappingSessions = mapper.Map<Session, SessionViewModel >(Session);
 
             MappingSessions.AvailableSlots = MappingSessions.Capacity - unitOfWork.SessionRepository.GetCountOfBookedSlots(MappingSessions.Id);
+           
             return MappingSessions;
         }
 

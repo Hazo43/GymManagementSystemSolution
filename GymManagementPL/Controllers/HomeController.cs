@@ -1,17 +1,26 @@
-﻿using GymManagementDAL.Entities;
+﻿using GymManagementBLL.Services.Interfaces;
+using GymManagementDAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementPL.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IAnalyticsService analyticsService;
+
         /// <summary>
         /// براحتي data و هحط ال return ل اي واحد من اللي تحت دول هعمل  return ف انا لو عاوز اعمل  ActionResult كل اللي عملتهم تحت دول وارثين من دا
         /// </summary>
         /// <returns></returns>
+
+        public HomeController(IAnalyticsService _analyticsService)
+        {
+            analyticsService = _analyticsService;
+        }
         public ActionResult Index()
         {
-            return View();
+            var Data = analyticsService.GetAnalyticsData();
+            return View(Data);
         }
         
         //public ViewResult Index()
