@@ -14,10 +14,12 @@ namespace GymManagementBLL.Services.Interfaces
         bool CreateTrainer(CreateTrainerViewModel createTrainer);
 
         TrainerViewModel? GetTrainerDetails(int trainerid);
-        
-        TrainerToUpdateViewModel? GetMemberToUpdate(int trainerId);
-        bool UpdateTrainer (int  trainerid, TrainerToUpdateViewModel updateTrainer);
+
+        UpdateTrainerViewModel? GetTrainerToUpdate(int trainerId);
+        bool UpdateTrainer(int trainerid, UpdateTrainerViewModel updateTrainer);
 
         bool DeleteTrainer(int trainerid);
     }
+
 }
+      

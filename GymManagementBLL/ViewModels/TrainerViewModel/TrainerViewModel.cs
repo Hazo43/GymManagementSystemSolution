@@ -10,15 +10,15 @@ namespace GymManagementBLL.ViewModels.TrainerViewModel
     public class TrainerViewModel
     {
         public int Id { get; set; }
+        public string? Photo { get; set; }
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
-        public Specialties Specialties { get; set; } 
+        public string DateOfBirth { get; set; } = null!;
+        public string Gender { get; set; } = null!;
+        public string Address { get; set; } = null!;
 
-        // -- GetTrainerDetails ---// 
-
-        public DateOnly? DateOfBirth { get; set; }
-        public string? Address { get; set; }
+        public string Specialties { get; set; } = null!;
 
     }
 }

@@ -22,7 +22,8 @@ namespace GymManagementPL.Controllers
             var Data = analyticsService.GetAnalyticsData();
             return View(Data);
         }
-        
+
+  
         //public ViewResult Index()
         //{
         //    /// => ده هو هو اللي تحت بس اللي تحت اسهل 

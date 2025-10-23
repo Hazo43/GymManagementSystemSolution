@@ -172,6 +172,18 @@ namespace GymManagementBLL.Services.Classes
 
         }
 
+        public IEnumerable<TrainerSelectViewModel> GetTrainerForDropDown()
+        {
+           var Trainers = unitOfWork.GetRepository<Trainer>().GetAll();
+            return mapper.Map<IEnumerable<TrainerSelectViewModel>>(Trainers);
+        }
+
+        public IEnumerable<CategorySelectViewModel> GetCategoryForDropDown()
+        {
+            var Categories = unitOfWork.GetRepository<Category>().GetAll();
+            return mapper.Map<IEnumerable<CategorySelectViewModel>>(Categories);
+        }
+
         #region Helper 
 
         private bool ISessionAvailableForUpdating(Session session)
@@ -211,6 +223,8 @@ namespace GymManagementBLL.Services.Classes
             return StartDate < EndDate; 
              
         }
+
+   
 
 
         #endregion
