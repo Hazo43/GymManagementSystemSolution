@@ -9,7 +9,7 @@ namespace GymManagementDAL.Entities
     public class Member : GymUserv
     {
         // JoinDate == CreatedAt => (inheritance) from BaseEntity
-        public string? Photo { get; set; } // Photo بس لل URL او ال Name هنخزن ال 
+        public string Photo { get; set; } = null!; // Photo بس لل URL او ال Name هنخزن ال 
 
         #region RelationShip
 
