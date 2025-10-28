@@ -1,4 +1,6 @@
 ﻿using GymManagementDAL.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.Context
 {
-    public class GymDbContext :DbContext
+    public class GymDbContext : IdentityDbContext<ApplicationUser>
     {
         public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
         {
@@ -23,12 +25,32 @@ namespace GymManagementDAL.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<ApplicationUser>( Eb =>
+            {
+                Eb.Property(x => x.FirstName)
+                  .HasColumnType("varchar")
+                  .HasMaxLength(50);
+              
+                Eb.Property(x => x.LastName)
+                  .HasColumnType("varchar")
+                  .HasMaxLength(50);
+            });
         }
 
         #region DbSets
 
         // => HealthRecord and Member => in the same table
+
+        /// <summary>
+        /// IdentityDbContext<ApplicationUser> دول خلاص مش محتاج ان انا اعرفهم دلوقت لاني بقيت وارثهم من
+        /// </summary>
+        //public DbSet<ApplicationUser> Users { get; set; }
+        //public DbSet<IdentityRole> Roles { get; set; }
+        //public DbSet<IdentityUserRole<string>> UserRoles {  get; set; }
+
         public DbSet<Member> Members { get; set; }
         public DbSet<HealthRecord> HealthRecords { get; set; }
         public DbSet<Plan> Plans { get; set; }

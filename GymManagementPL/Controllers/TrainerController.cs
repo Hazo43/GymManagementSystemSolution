@@ -1,10 +1,13 @@
 ﻿using GymManagementBLL.Services.Classes;
 using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.TrainerViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementPL.Controllers
 {
+
+    [Authorize( Roles ="SuperAdmin")]
     public class TrainerController : Controller
     {
         private readonly ITrainerService trainerService;
@@ -55,12 +58,12 @@ namespace GymManagementPL.Controllers
         }
 
         [HttpPost]
-        public ActionResult TrainerCreate(CreateTrainerViewModel createTrainer)
+        public ActionResult CreateTrainer(CreateTrainerViewModel createTrainer)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("DataInValid", "Check Data And Missing Fields");
-                return View(nameof(Create));
+                return View(createTrainer);
             }
 
             bool Result = trainerService.CreateTrainer(createTrainer);
@@ -68,10 +71,12 @@ namespace GymManagementPL.Controllers
             if (Result == true)
             {
                 TempData["SuccessMessage"] = "Trainer Created Successfully";
+                return RedirectToAction(nameof(Index));
             }
             else
             {
                 TempData["ErrorMessage"] = "Trainer Faild To Create";
+                
             }
 
             return RedirectToAction(nameof(Create));

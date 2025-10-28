@@ -1,5 +1,8 @@
 ﻿@using GymManagementBLL.ViewModels.MemberViewModels
 @model IEnumerable<MemberViewModel>
+@{
+    ViewData["Title"] = "Members";
+}
     
             @if (TempData["SuccessMessage"] is not null)
             {
@@ -48,7 +51,7 @@
                                             <span class="avatar">
                                                 @if(string.IsNullOrEmpty(member.Photo))
                                                 {
-                                                    <img src="~/images/User.jpg" alt="Default Avatar" class="rounded-circle"
+                                                    <img src="~/images/members/@member.Photo"  alt="@member.Name" class="rounded-circle"
                                                     style="width: 40px; height: 40px;" />
                                                 }
                                                 else
@@ -103,7 +106,7 @@
                                                         <hr class="dropdown-divider">
                                                     </li>
                                                     <li>
-                                                         <a href="asp-Controller=" Member" asp-action="Delete" asp-route-id="@member.Id" 
+                                                         <a asp-controller="Member" asp-action="Delete" asp-route-id="@member.Id" 
                                                            class="dropdown-item d-flex align-items-center gap-3 text-danger">
                                                             <img src="~/images/x-circle 1.jpg" alt="delete icon"
                                                                  style="width: 20px; height: 20px;" />

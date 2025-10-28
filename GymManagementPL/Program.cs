@@ -4,8 +4,10 @@ using GymManagementBLL.Services.Classes;
 using GymManagementBLL.Services.Interfaces;
 using GymManagementDAL.Data.Context;
 using GymManagementDAL.Data.DataSeed;
+using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Classes;
 using GymManagementDAL.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 namespace GymManagementPL
 {
@@ -34,6 +36,27 @@ namespace GymManagementPL
             builder.Services.AddScoped<IPlanService , PlanService>();
             builder.Services.AddScoped<ISessionService , SessionService>();
             builder.Services.AddScoped<IAttachmentService  , AttachmentService>();
+            builder.Services.AddScoped<IAccountService , AccountService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>( config =>
+            {
+                // by default Ïæá ããßä ÇãÓÍåã åãÇ ãæÌæÏíä ÇÕáÇ
+                //config.Password.RequiredLength = 6;
+                //config.Password.RequireLowercase = true;
+                //config.Password.RequireUppercase = true;
+
+                // Email Unique
+                config.User.RequireUniqueEmail = true;
+
+            }).AddEntityFrameworkStores<GymDbContext>();
+
+            // by default ããßä ãÚãáåÇÔ ÇÕáÇ áÇä åíå ãæÌæÏå
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                // Login ãÔ ÚÇãá user Ïí åíÑæÍ Úáíå áæ Çá
+                options.LoginPath = "/Account/Login";
+                // ãÔ ãÓãæÍ áíå È ÇáÍÇÌå Çááí åæ ÑÇíÍ ÚáíåÇ user  Ïí åíÑæÍ ÚáíåÇ áæ Çá
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
 
             var app = builder.Build();
 
@@ -41,6 +64,9 @@ namespace GymManagementPL
 
             using var Scope = app.Services.CreateScope();
              var dbcontext = Scope.ServiceProvider.GetRequiredService<GymDbContext>();
+            // 
+            var roleManager = Scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = Scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             
             /// seeding ŞíÏ ÇáÇäÊÙÇÑ íÚäí áÓå ãÊÚãáÊÔ åíÑæÍ íäİĞåÇ ŞÈá ãÇ íÚãá migrations áæ İíå check ÈÊÚãá 
           
@@ -51,6 +77,8 @@ namespace GymManagementPL
             }
 
             GymDbContextSeeding.SeedData(dbcontext);
+            // 
+            IdentityDbContextSeeding.SeedDataUser(roleManager ,  userManager);
 
             #endregion
 
@@ -63,7 +91,10 @@ namespace GymManagementPL
             }
 
             app.UseHttpsRedirection();
+
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -71,7 +102,7 @@ namespace GymManagementPL
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=Account}/{action=Login}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
